@@ -136,13 +136,16 @@ type of plugin you want to target is selected as plugin type.
 Overriding the `PreviewRendererResolver`
 ----------------------------------------
 
-If necessary, the :php:`PreviewRendererResolver` can be overridden by setting:
+If necessary, the :php:`PreviewRendererResolver` can be overridden by registering your own implementation via Symfony DI:
 
-.. code-block:: php
+.. code-block:: yaml
 
-    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['backend']['previewRendererResolver'] = \TYPO3\CMS\Backend\Preview\StandardPreviewRendererResolver::class;
+    services:
+     TYPO3\CMS\Backend\Preview\StandardPreviewRendererResolver:
+       class: \YOUR_NAMESPACE\YOUR_IMPLEMENTING_CLASS
+       public: true
 
-Once overridden, the old resolver will no longer be consulted.
+Mind the :yaml:`public: true` which allows :php:`GeneralUtility::makeInstance` to load the class via DI. Once overridden, the old resolver will no longer be consulted.
 
 :php:`\TYPO3\CMS\Backend\Preview\PreviewRendererResolverInterface` must be implemented by :php:`PreviewRendererResolvers` and
 contains a single API method, :php:`public function resolveRendererFor($table, array $row, int $pageUid);` which
